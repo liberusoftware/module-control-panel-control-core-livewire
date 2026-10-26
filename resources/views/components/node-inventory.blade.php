@@ -1,6 +1,9 @@
 <section aria-labelledby="control-core-node-inventory">
     <h2 id="control-core-node-inventory">Node inventory</h2>
 
+    <label for="node-search">Search nodes</label>
+    <input id="node-search" type="search" wire:model.live.debounce.300ms="search">
+
     @if ($nodes->isEmpty())
         <p>No nodes are registered for the current team.</p>
     @else
@@ -10,6 +13,9 @@
                     <span>{{ $node->name }}</span>
                     <span>{{ $node->hostname }}</span>
                     <span>{{ $node->status->value }}</span>
+                    @if ($node->status->value !== 'decommissioned')
+                        <button type="button" wire:click="decommission('{{ $node->getKey() }}')">Decommission</button>
+                    @endif
                 </li>
             @endforeach
         </ul>
